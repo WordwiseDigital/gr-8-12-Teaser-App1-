@@ -1,234 +1,168 @@
-<!doctype html>
-<html lang="af">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wordwise Afrikaans Teaser App – Gr. 8–12</title>
-  <style>
-    body {
-      background-color: #f0f2f5;
-      font-family: 'Helvetica Neue', sans-serif;
-      background-image: url('https://cdn.pixabay.com/photo/2021/08/21/19/02/social-media-6568955_1280.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      color: #333;
-      padding: 20px;
-    }
-    h1, h2, h3 {
-      font-family: 'Poppins', sans-serif;
-    }
-    .button, button {
-      background-color: #4267B2;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-top: 10px;
-    }
-    .button:hover {
-      background-color: #365899;
-    }
-    .lesson-card, .question-card, .result-card {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .en {
-      font-style: italic;
-      color: #555;
-      display: block;
-      margin-top: 8px;
-    }
-    .option {
-      margin: 8px 0;
-      display: block;
-    }
-    .hidden { display: none; }
-  </style>
-</head>
-<body>
-  <h1>⚡ Wordwise Afrikaans Teaser App – Gr. 8–12 ⚡</h1>
-  <div id="app"></div>
 
-  <script>
-    const CONFIG = {
-      COURSE_URL: 'https://www.wordwise.co.za/product-category/course/'
-    };
+📱 Grade 4–7 Afrikaans FAL Teaser-App
 
-    const lessons = [
-      { title: 'Les 1 – Samestellende Afleidings', body: ['’n <strong>Samestellende afleiding</strong> is ’n woord wat gevorm is deur ’n samestelling + afleiding. Voorbeeld: <em>boek</em> + <em>rak</em> + <em>kie</em> = <em>boekrakkie</em>. <span class="en">*Compound + suffix = compound derivative.*</span>'] },
-      { title: 'Les 2 – Ontkenning', body: ['In Afrikaans gebruik ons <strong>dubbele ontkenning</strong>: “nie ... nie”. Byvoorbeeld: <em>Ek eet nie vis nie.</em> <span class="en">*Use “nie” twice to form a negative sentence.*</span>'] },
-      { title: 'Les 3 – Trappe van Vergelyking', body: ['Gebruik die stellende, vergrotende en oortreffende trap om byvoeglike naamwoorde te vergelyk: vinnig, vinniger, vinnigste. <span class="en">*Degrees of comparison – fast, faster, fastest.*</span>'] },
-      { title: 'Les 4 – Direkte en Indirekte Rede', body: ['Direkte rede: “Ek hou van skool,” sê hy. Indirekte rede: Hy sê dat hy van skool hou. <span class="en">*Direct vs. indirect speech.*</span>'] },
-      { title: 'Les 5 – Voegwoorde', body: ['Voorbeeld: Ek wil gaan swem, <strong>maar</strong> dit reën. Groepe: Groep 1 (maar, en), Groep 2 (dus, daarom), Groep 3 (dat, omdat, wanneer). <span class="en">*Conjunctions that change word order.*</span>'] },
-      { title: 'Les 6 – Lydende en Bedrywende Vorm', body: ['Bedrywende: Die hond byt die man. Lydende: Die man word deur die hond gebyt. <span class="en">*Active and passive voice.*</span>'] },
-      { title: 'Les 7 – Woordsoorte', body: ['Selfstandige naamwoord (mens, dier, ding), werkwoord (doenwoord), byvoeglike naamwoord (beskryf ’n naamwoord), bywoord (beskryf ’n werkwoord). <span class="en">*Parts of speech overview.*</span>'] }
-    ];
+(Short lessons + instant Q&A — Afrikaans with short English help)
 
-    const questions = [
-      // Les 1
-      { type: 'mcq', prompt: 'Wat is ’n voorbeeld van ’n samestellende afleiding?', options: [
-        { t: 'katjie', correct: false },
-        { t: 'leerboekie', correct: true },
-        { t: 'stoel', correct: false }
-      ] },
-      { type: 'tf', prompt: '“Boeksakkie” is ’n samestellende afleiding.', answer: true },
-      { type: 'short', prompt: 'Wat noem ons ’n woord wat uit ’n samestelling én ’n afleiding bestaan?', answer: 'samestellende afleiding' },
-      { type: 'mcq', prompt: 'Watter een is nie ’n samestellende afleiding nie?', options: [
-        { t: 'skooltas', correct: true },
-        { t: 'handdoekie', correct: false },
-        { t: 'speelkamer', correct: true }
-      ] },
-      { type: 'short', prompt: 'Skryf ’n voorbeeld van ’n samestellende afleiding.', answer: 'boekrakie' },
+Les 1: Trappe van Vergelyking
 
-      // Les 2
-      { type: 'short', prompt: 'Skryf die negatiewe vorm: “Hy eet vis.”', answer: 'Hy eet nie vis nie' },
-      { type: 'tf', prompt: 'In ontkenning gebruik ons slegs een keer “nie”.', answer: false },
-      { type: 'mcq', prompt: 'Kies die korrekte negatiewe vorm: “Ek hou van skool.”', options: [
-        { t: 'Ek hou nie van skool nie.', correct: true },
-        { t: 'Ek hou nie van skool.', correct: false },
-        { t: 'Nie ek hou van skool nie.', correct: false }
-      ] },
-      { type: 'short', prompt: 'Watter twee woorde gebruik ons in ontkenning?', answer: 'nie nie' },
-      { type: 'tf', prompt: '“Sy gaan nie winkel toe nie.” is korrek.', answer: true },
+In Afrikaans gebruik ons trappe van vergelyking om dinge te vergelyk.
 
-      // Les 3
-      { type: 'mcq', prompt: 'Wat is die oortreffende trap van “vinnig”?', options: [
-        { t: 'vinnigste', correct: true },
-        { t: 'vinniger', correct: false },
-        { t: 'vinnig', correct: false }
-      ] },
-      { type: 'short', prompt: 'Wat is die vergrotende trap van “lekker”?', answer: 'lekkerder' },
-      { type: 'tf', prompt: '“Mooiste” is die oortreffende trap van “mooi”.', answer: true },
-      { type: 'mcq', prompt: 'Watter opsie wys die regte volgorde?', options: [
-        { t: 'groot, groter, grootste', correct: true },
-        { t: 'groot, grootste, groter', correct: false },
-        { t: 'groter, groot, grootste', correct: false }
-      ] },
-      { type: 'short', prompt: 'Wat is die stellende trap van “beter”?', answer: 'goed' },
+Stellend – basisvorm: Die hond is vinnig. (The dog is fast.)
 
-      // Les 4
-      { type: 'short', prompt: 'Verander na indirekte rede: “Ek hou van kos,” sê sy.', answer: 'Sy sê dat sy van kos hou.' },
-      { type: 'tf', prompt: 'Indirekte rede gebruik altyd aanhalingstekens.', answer: false },
-      { type: 'mcq', prompt: 'Wat is “Hy sê dat hy bly is.”?', options: [
-        { t: 'Indirekte rede', correct: true },
-        { t: 'Direkte rede', correct: false } ] },
-      { type: 'short', prompt: 'Verander na direkte rede: Hy sê dat hy moeg is.', answer: '“Ek is moeg,” sê hy.' },
-      { type: 'tf', prompt: 'Direkte rede begin altyd met ’n hoofletter.', answer: true },
+Vergrotend – voeg “-er” of “meer” by: Die hond is vinniger as die kat. (The dog is faster than the cat.)
 
-      // Les 5
-      { type: 'mcq', prompt: 'Watter voegwoord verander die woordorde?', options: [
-        { t: 'dus', correct: true },
-        { t: 'en', correct: false },
-        { t: 'of', correct: false }
-      ] },
-      { type: 'tf', prompt: '“Maar” is ’n voegwoord van groep 1.', answer: true },
-      { type: 'short', prompt: 'Wat gebeur met die werkwoord ná ’n groep 2 voegwoord?', answer: 'dit skuif een plek op' },
-      { type: 'mcq', prompt: 'Kies die groep 3 voegwoord:', options: [
-        { t: 'omdat', correct: true },
-        { t: 'maar', correct: false },
-        { t: 'dus', correct: false } ] },
-      { type: 'short', prompt: 'Voltooi: Ek gaan nie skool toe nie, ______ dit reën.', answer: 'want' },
+Oortreffend – voeg “-ste” of “mees” by: Die hond is die vinnigste van almal. (The dog is the fastest of all.)
 
-      // Les 6
-      { type: 'short', prompt: 'Verander na lydende vorm: Die seun skop die bal.', answer: 'Die bal word deur die seun geskop.' },
-      { type: 'tf', prompt: 'Lydende vorm gebruik “word” of “is” in die sin.', answer: true },
-      { type: 'mcq', prompt: 'Wat is bedrywende vorm?', options: [
-        { t: 'Die onderwerp doen die aksie', correct: true },
-        { t: 'Die aksie gebeur aan die onderwerp', correct: false } ] },
-      { type: 'tf', prompt: '“Die hond word deur die kat gejaag.” is bedrywende vorm.', answer: false },
-      { type: 'short', prompt: 'Wat is die teenoorgestelde van lydende vorm?', answer: 'bedrywende vorm' },
+💡 Think: stellend = normal, vergrotend = comparing, oortreffend = the most.
 
-      // Les 7
-      { type: 'mcq', prompt: 'Watter een is ’n werkwoord?', options: [
-        { t: 'spring', correct: true },
-        { t: 'groen', correct: false },
-        { t: 'huis', correct: false } ] },
-      { type: 'short', prompt: 'Wat noem ons ’n woord wat ’n werkwoord beskryf?', answer: 'bywoord' },
-      { type: 'tf', prompt: '“Hond” is ’n selfstandige naamwoord.', answer: true },
-      { type: 'short', prompt: 'Wat is die woordsoort van “mooi”?', answer: 'byvoeglike naamwoord' },
-      { type: 'mcq', prompt: 'Watter een beskryf ’n naamwoord?', options: [
-        { t: 'mooi', correct: true },
-        { t: 'hardloop', correct: false },
-        { t: 'vinnig', correct: false } ] }
-    ];
+Vrae en Antwoorde:
 
-    let lessonIndex = 0;
-    let questionIndex = 0;
-    let score = 0;
+Watter trap is “mooi” in “Sy rok is mooier as myne”?
+Antwoord: Vergrotend (Comparative)
 
-    const app = document.getElementById('app');
+Voltooi: Die reier is die (vinnig) ______ voël in die dam.
+Antwoord: vinnigste (Fastest)
 
-    function showLesson() {
-      const l = lessons[lessonIndex];
-      app.innerHTML = `<div class='lesson-card'><h2>${l.title}</h2>${l.body.map(b => `<p>${b}</p>`).join('')}<button onclick='nextLesson()'>Volgende</button></div>`;
-    }
+Watter woord gebruik ons vir vergrotend by “interessant”?
+Antwoord: meer interessant (More interesting)
 
-    function nextLesson() {
-      lessonIndex++;
-      if (lessonIndex < lessons.length) showLesson();
-      else showQuestion();
-    }
+Les 2: Meervoude
 
-    function showQuestion() {
-      const q = questions[questionIndex];
-      let html = `<div class='question-card'><h3>${q.prompt}</h3>`;
+Meervoude wys vir ons dat daar meer as een van iets is.
 
-      if (q.type === 'mcq') {
-        q.options.forEach((o, i) => {
-          html += `<label class='option'><input type='radio' name='q${questionIndex}' onclick='submitMCQ(${i})'> ${o.t}</label>`;
-        });
-      } else if (q.type === 'tf') {
-        html += `<button onclick='submitTF(true)'>Waar</button> <button onclick='submitTF(false)'>Onwaar</button>`;
-      } else if (q.type === 'short') {
-        html += `<input id='short' placeholder='Tik jou antwoord hier'><br><button onclick='submitShort()'>Stuur</button>`;
-      }
+Enkelklank: kat → katte (cat → cats)
 
-      html += `</div>`;
-      app.innerHTML = html;
-    }
+Dubbelklank: boom → bome (tree → trees)
 
-    function submitMCQ(i) {
-      const q = questions[questionIndex];
-      const correct = q.options[i].correct;
-      if (correct) score++;
-      alert(correct ? 'Reg!' : 'Oeps, probeer weer.');
-      nextQuestion();
-    }
+Eindig op “f”: gif → giwwe (poison → poisons)
 
-    function submitTF(val) {
-      const correct = val === questions[questionIndex].answer;
-      if (correct) score++;
-      alert(correct ? 'Reg!' : 'Verkeerd.');
-      nextQuestion();
-    }
+Onreëlmatig: kind → kinders (child → children)
 
-    function submitShort() {
-      const ans = document.getElementById('short').value.trim().toLowerCase();
-      const correctAns = questions[questionIndex].answer.toLowerCase();
-      const correct = ans === correctAns;
-      if (correct) score++;
-      alert(correct ? 'Reg!' : `Nee, die regte antwoord is: ${questions[questionIndex].answer}`);
-      nextQuestion();
-    }
+💡 Afrikaans plural rules change based on the vowels and ending letters.
 
-    function nextQuestion() {
-      questionIndex++;
-      if (questionIndex < questions.length) showQuestion();
-      else showResults();
-    }
+Vrae en Antwoorde:
 
-    function showResults() {
-      app.innerHTML = `<div class='result-card'><h2>Jy het ${score} uit ${questions.length} reg!</h2><a class='button' href='${CONFIG.COURSE_URL}' target='_blank'>Leer meer oor die kursus</a></div>`;
-    }
+Wat is die meervoud van “stoel”?
+Antwoord: stoele (Chairs)
 
-    showLesson();
-  </script>
-</body>
-</html>
+Watter reël pas by “sif → siwwe”?
+Antwoord: Eindig op “f” → verander na “wwe” (Ends in f → change to wwe)
+
+Gee die meervoud van “boek”.
+Antwoord: boeke (Books)
+
+Les 3: Voorsetsels
+
+Voorsetsels wys die verhouding tussen woorde.
+Voorbeelde: op (on), onder (under), tussen (between), langs (next to).
+
+Die kat slaap op die mat. (The cat sleeps on the mat.)
+
+Die hond lê onder die tafel. (The dog lies under the table.)
+
+💡 Prepositions link the noun to the rest of the sentence.
+
+Vrae en Antwoorde:
+
+Vul in: Die bal is (binne) ______ die boks. (in English: inside the box)
+Antwoord: in (In)
+
+Watter voorsetsel pas by: “Ons sit (at) ______ die vuur en gesels”?
+Antwoord: by (By)
+
+Kies: tussen / op – “Die brug is (between) _____ die twee dorpe.”
+Antwoord: tussen (Between)
+
+Les 4: Direkte en Indirekte Rede
+
+Direkte rede: Jy skryf presies wat iemand sê.
+Hy sê: “Ek hou van sjokolade.” (He says: “I like chocolate.”)
+
+Indirekte rede: Jy vertel wat gesê is, sonder aanhalingstekens.
+Hy sê dat hy van sjokolade hou. (He says that he likes chocolate.)
+
+💡 Direct = exact words, Indirect = reported speech.
+
+Vrae en Antwoorde:
+
+Skryf in indirekte rede: Anna sê: “Ek is moeg.”
+Antwoord: Anna sê dat sy moeg is.
+
+Is “Hy vra of ek klaar is” direk of indirek?
+Antwoord: Indirek (Indirect)
+
+Watter woord gebruik ons gewoonlik in indirekte rede om die sin te verbind?
+Antwoord: dat (that)
+
+Les 5: Idiome
+
+Idiome gee kleur aan Afrikaans.
+
+“Hy het lang vingers” = Hy steel. (He steals.)
+
+“Die kat uit die sak laat” = ’n geheim verklap. (Reveal a secret.)
+
+“Met die deur in die huis val” = sommer dadelik tot die punt kom. (Get straight to the point.)
+
+💡 Idioms can’t be translated word-for-word.
+
+Vrae en Antwoorde:
+
+Wat beteken “Sy oë is groter as sy maag”?
+Antwoord: Hy skep te veel kos op. (He takes more food than he can eat.)
+
+Watter idioom beteken om iets per ongeluk te verklap?
+Antwoord: Die kat uit die sak laat (Let the cat out of the bag)
+
+Vul aan: “Hulle is soos hond en ___.”
+Antwoord: kat (Cat)
+
+Les 6: Woordorde (STOMPI)
+
+STOMPI help ons om sinvol sinne te bou:
+S – onderwerp (subject)
+T – tyd (time)
+O – voorwerp (object)
+M – wyse (manner)
+P – plek (place)
+I – infinitief (infinitive)
+
+Ek (S) drink (V1) elke dag (T) water (O) vinnig (M) in die kombuis (P).
+
+💡 The verb positions change in questions and past/future tense.
+
+Vrae en Antwoorde:
+
+Watter deel van STOMPI wys hoe vinnig iets gebeur?
+Antwoord: M – wyse (M – manner)
+
+Plaas die woorde in STOMPI: “In die park speel die kinders elke Saterdag lekker.”
+Antwoord: Die kinders speel elke Saterdag lekker in die park.
+
+Watter deel kom eerste – tyd of plek?
+Antwoord: Tyd (Time)
+
+Les 7: Woordsoorte
+
+Woordsoorte is die verskillende “tipes” woorde wat ons in Afrikaans gebruik.
+
+Selfstandige naamwoord – name van dinge, plekke of mense (kat, huis, Anna).
+
+Werkwoord – ’n doen-woord (hardloop, eet, sing).
+
+Byvoeglike naamwoord – beskryf ’n selfstandige naamwoord (groot hond, mooi rok).
+
+Bywoord – beskryf hoe iets gebeur (hardloop vinnig, eet stadig).
+
+💡 Parts of speech tell us the job each word does in a sentence.
+
+Vrae en Antwoorde:
+
+Watter woordsoort is “huis”?
+Antwoord: Selfstandige naamwoord (Noun)
+
+Watter woordsoort is “vinnig” in “Die hond hardloop vinnig”?
+Antwoord: Bywoord (Adverb)
+
+Watter woordsoort is “sing”?
+Antwoord: Werkwoord (Verb)
