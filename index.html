@@ -1,10 +1,9 @@
 <!doctype html>
 <html lang="af">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wordwise Afrikaans Challenge – Senior Edition (Gr. 8–12)</title>
-  <meta name="description" content="Gratis teaser-app: proef ’n stukkie van ons Afrikaans FAL-kursus vir Graad 8–12. Lesse, vasvrae, punte en skakels om verder te leer."/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wordwise Afrikaans Teaser App – Gr. 8–12</title>
   <style>
     body {
       background-color: #f0f2f5;
@@ -14,6 +13,7 @@
       background-size: cover;
       background-position: center;
       color: #333;
+      padding: 20px;
     }
     h1, h2, h3 {
       font-family: 'Poppins', sans-serif;
@@ -27,35 +27,208 @@
       font-size: 16px;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-top: 10px;
     }
     .button:hover {
       background-color: #365899;
     }
-    .lesson-card {
+    .lesson-card, .question-card, .result-card {
       background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
       padding: 20px;
       margin: 20px 0;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+    .en {
+      font-style: italic;
+      color: #555;
+      display: block;
+      margin-top: 8px;
+    }
+    .option {
+      margin: 8px 0;
+      display: block;
+    }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
   <h1>⚡ Wordwise Afrikaans Teaser App – Gr. 8–12 ⚡</h1>
-  <p>Laai die volledige les en speletjie nou...</p>
+  <div id="app"></div>
 
-  <!-- Interactive lessons and quiz scripts will be added dynamically -->
   <script>
-    // INSERTED SCRIPT CONFIG & GAME CONTENT TRUNCATED FOR DEMO
     const CONFIG = {
-      COURSE_URL: 'https://www.wordwise.co.za/product-category/course/',
-      FORM_ACTION_URL: 'https://www.wordwise.co.za?mailpoet_form_id=7',
-      REDIRECT_AFTER_FORM: 'app',
-      ENABLE_PREVIEW_BUTTON: true,
+      COURSE_URL: 'https://www.wordwise.co.za/product-category/course/'
     };
 
-    const lessons = [...]; // all 10 lessons
-    const bank = [...];    // all 15+ questions
+    const lessons = [
+      { title: 'Les 1 – Samestellende Afleidings', body: ['’n <strong>Samestellende afleiding</strong> is ’n woord wat gevorm is deur ’n samestelling + afleiding. Voorbeeld: <em>boek</em> + <em>rak</em> + <em>kie</em> = <em>boekrakkie</em>. <span class="en">*Compound + suffix = compound derivative.*</span>'] },
+      { title: 'Les 2 – Ontkenning', body: ['In Afrikaans gebruik ons <strong>dubbele ontkenning</strong>: “nie ... nie”. Byvoorbeeld: <em>Ek eet nie vis nie.</em> <span class="en">*Use “nie” twice to form a negative sentence.*</span>'] },
+      { title: 'Les 3 – Trappe van Vergelyking', body: ['Gebruik die stellende, vergrotende en oortreffende trap om byvoeglike naamwoorde te vergelyk: vinnig, vinniger, vinnigste. <span class="en">*Degrees of comparison – fast, faster, fastest.*</span>'] },
+      { title: 'Les 4 – Direkte en Indirekte Rede', body: ['Direkte rede: “Ek hou van skool,” sê hy. Indirekte rede: Hy sê dat hy van skool hou. <span class="en">*Direct vs. indirect speech.*</span>'] },
+      { title: 'Les 5 – Voegwoorde', body: ['Voorbeeld: Ek wil gaan swem, <strong>maar</strong> dit reën. Groepe: Groep 1 (maar, en), Groep 2 (dus, daarom), Groep 3 (dat, omdat, wanneer). <span class="en">*Conjunctions that change word order.*</span>'] },
+      { title: 'Les 6 – Lydende en Bedrywende Vorm', body: ['Bedrywende: Die hond byt die man. Lydende: Die man word deur die hond gebyt. <span class="en">*Active and passive voice.*</span>'] },
+      { title: 'Les 7 – Woordsoorte', body: ['Selfstandige naamwoord (mens, dier, ding), werkwoord (doenwoord), byvoeglike naamwoord (beskryf ’n naamwoord), bywoord (beskryf ’n werkwoord). <span class="en">*Parts of speech overview.*</span>'] }
+    ];
+
+    const questions = [
+      // Les 1
+      { type: 'mcq', prompt: 'Wat is ’n voorbeeld van ’n samestellende afleiding?', options: [
+        { t: 'katjie', correct: false },
+        { t: 'leerboekie', correct: true },
+        { t: 'stoel', correct: false }
+      ] },
+      { type: 'tf', prompt: '“Boeksakkie” is ’n samestellende afleiding.', answer: true },
+      { type: 'short', prompt: 'Wat noem ons ’n woord wat uit ’n samestelling én ’n afleiding bestaan?', answer: 'samestellende afleiding' },
+      { type: 'mcq', prompt: 'Watter een is nie ’n samestellende afleiding nie?', options: [
+        { t: 'skooltas', correct: true },
+        { t: 'handdoekie', correct: false },
+        { t: 'speelkamer', correct: true }
+      ] },
+      { type: 'short', prompt: 'Skryf ’n voorbeeld van ’n samestellende afleiding.', answer: 'boekrakie' },
+
+      // Les 2
+      { type: 'short', prompt: 'Skryf die negatiewe vorm: “Hy eet vis.”', answer: 'Hy eet nie vis nie' },
+      { type: 'tf', prompt: 'In ontkenning gebruik ons slegs een keer “nie”.', answer: false },
+      { type: 'mcq', prompt: 'Kies die korrekte negatiewe vorm: “Ek hou van skool.”', options: [
+        { t: 'Ek hou nie van skool nie.', correct: true },
+        { t: 'Ek hou nie van skool.', correct: false },
+        { t: 'Nie ek hou van skool nie.', correct: false }
+      ] },
+      { type: 'short', prompt: 'Watter twee woorde gebruik ons in ontkenning?', answer: 'nie nie' },
+      { type: 'tf', prompt: '“Sy gaan nie winkel toe nie.” is korrek.', answer: true },
+
+      // Les 3
+      { type: 'mcq', prompt: 'Wat is die oortreffende trap van “vinnig”?', options: [
+        { t: 'vinnigste', correct: true },
+        { t: 'vinniger', correct: false },
+        { t: 'vinnig', correct: false }
+      ] },
+      { type: 'short', prompt: 'Wat is die vergrotende trap van “lekker”?', answer: 'lekkerder' },
+      { type: 'tf', prompt: '“Mooiste” is die oortreffende trap van “mooi”.', answer: true },
+      { type: 'mcq', prompt: 'Watter opsie wys die regte volgorde?', options: [
+        { t: 'groot, groter, grootste', correct: true },
+        { t: 'groot, grootste, groter', correct: false },
+        { t: 'groter, groot, grootste', correct: false }
+      ] },
+      { type: 'short', prompt: 'Wat is die stellende trap van “beter”?', answer: 'goed' },
+
+      // Les 4
+      { type: 'short', prompt: 'Verander na indirekte rede: “Ek hou van kos,” sê sy.', answer: 'Sy sê dat sy van kos hou.' },
+      { type: 'tf', prompt: 'Indirekte rede gebruik altyd aanhalingstekens.', answer: false },
+      { type: 'mcq', prompt: 'Wat is “Hy sê dat hy bly is.”?', options: [
+        { t: 'Indirekte rede', correct: true },
+        { t: 'Direkte rede', correct: false } ] },
+      { type: 'short', prompt: 'Verander na direkte rede: Hy sê dat hy moeg is.', answer: '“Ek is moeg,” sê hy.' },
+      { type: 'tf', prompt: 'Direkte rede begin altyd met ’n hoofletter.', answer: true },
+
+      // Les 5
+      { type: 'mcq', prompt: 'Watter voegwoord verander die woordorde?', options: [
+        { t: 'dus', correct: true },
+        { t: 'en', correct: false },
+        { t: 'of', correct: false }
+      ] },
+      { type: 'tf', prompt: '“Maar” is ’n voegwoord van groep 1.', answer: true },
+      { type: 'short', prompt: 'Wat gebeur met die werkwoord ná ’n groep 2 voegwoord?', answer: 'dit skuif een plek op' },
+      { type: 'mcq', prompt: 'Kies die groep 3 voegwoord:', options: [
+        { t: 'omdat', correct: true },
+        { t: 'maar', correct: false },
+        { t: 'dus', correct: false } ] },
+      { type: 'short', prompt: 'Voltooi: Ek gaan nie skool toe nie, ______ dit reën.', answer: 'want' },
+
+      // Les 6
+      { type: 'short', prompt: 'Verander na lydende vorm: Die seun skop die bal.', answer: 'Die bal word deur die seun geskop.' },
+      { type: 'tf', prompt: 'Lydende vorm gebruik “word” of “is” in die sin.', answer: true },
+      { type: 'mcq', prompt: 'Wat is bedrywende vorm?', options: [
+        { t: 'Die onderwerp doen die aksie', correct: true },
+        { t: 'Die aksie gebeur aan die onderwerp', correct: false } ] },
+      { type: 'tf', prompt: '“Die hond word deur die kat gejaag.” is bedrywende vorm.', answer: false },
+      { type: 'short', prompt: 'Wat is die teenoorgestelde van lydende vorm?', answer: 'bedrywende vorm' },
+
+      // Les 7
+      { type: 'mcq', prompt: 'Watter een is ’n werkwoord?', options: [
+        { t: 'spring', correct: true },
+        { t: 'groen', correct: false },
+        { t: 'huis', correct: false } ] },
+      { type: 'short', prompt: 'Wat noem ons ’n woord wat ’n werkwoord beskryf?', answer: 'bywoord' },
+      { type: 'tf', prompt: '“Hond” is ’n selfstandige naamwoord.', answer: true },
+      { type: 'short', prompt: 'Wat is die woordsoort van “mooi”?', answer: 'byvoeglike naamwoord' },
+      { type: 'mcq', prompt: 'Watter een beskryf ’n naamwoord?', options: [
+        { t: 'mooi', correct: true },
+        { t: 'hardloop', correct: false },
+        { t: 'vinnig', correct: false } ] }
+    ];
+
+    let lessonIndex = 0;
+    let questionIndex = 0;
+    let score = 0;
+
+    const app = document.getElementById('app');
+
+    function showLesson() {
+      const l = lessons[lessonIndex];
+      app.innerHTML = `<div class='lesson-card'><h2>${l.title}</h2>${l.body.map(b => `<p>${b}</p>`).join('')}<button onclick='nextLesson()'>Volgende</button></div>`;
+    }
+
+    function nextLesson() {
+      lessonIndex++;
+      if (lessonIndex < lessons.length) showLesson();
+      else showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[questionIndex];
+      let html = `<div class='question-card'><h3>${q.prompt}</h3>`;
+
+      if (q.type === 'mcq') {
+        q.options.forEach((o, i) => {
+          html += `<label class='option'><input type='radio' name='q${questionIndex}' onclick='submitMCQ(${i})'> ${o.t}</label>`;
+        });
+      } else if (q.type === 'tf') {
+        html += `<button onclick='submitTF(true)'>Waar</button> <button onclick='submitTF(false)'>Onwaar</button>`;
+      } else if (q.type === 'short') {
+        html += `<input id='short' placeholder='Tik jou antwoord hier'><br><button onclick='submitShort()'>Stuur</button>`;
+      }
+
+      html += `</div>`;
+      app.innerHTML = html;
+    }
+
+    function submitMCQ(i) {
+      const q = questions[questionIndex];
+      const correct = q.options[i].correct;
+      if (correct) score++;
+      alert(correct ? 'Reg!' : 'Oeps, probeer weer.');
+      nextQuestion();
+    }
+
+    function submitTF(val) {
+      const correct = val === questions[questionIndex].answer;
+      if (correct) score++;
+      alert(correct ? 'Reg!' : 'Verkeerd.');
+      nextQuestion();
+    }
+
+    function submitShort() {
+      const ans = document.getElementById('short').value.trim().toLowerCase();
+      const correctAns = questions[questionIndex].answer.toLowerCase();
+      const correct = ans === correctAns;
+      if (correct) score++;
+      alert(correct ? 'Reg!' : `Nee, die regte antwoord is: ${questions[questionIndex].answer}`);
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      questionIndex++;
+      if (questionIndex < questions.length) showQuestion();
+      else showResults();
+    }
+
+    function showResults() {
+      app.innerHTML = `<div class='result-card'><h2>Jy het ${score} uit ${questions.length} reg!</h2><a class='button' href='${CONFIG.COURSE_URL}' target='_blank'>Leer meer oor die kursus</a></div>`;
+    }
+
+    showLesson();
   </script>
 </body>
 </html>
